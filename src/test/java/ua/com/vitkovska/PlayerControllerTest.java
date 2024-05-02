@@ -43,8 +43,6 @@ public class PlayerControllerTest {
     @Autowired
     private PlayerDao playerDao;
 
-    private static TeamDao teamDao;
-
     @Autowired
     private ObjectMapper objectMapper;
     private Player player;
@@ -63,7 +61,6 @@ public class PlayerControllerTest {
 
     @BeforeAll
     public static void fillDatabaseTeamTable(@Autowired TeamDao teamDao) {
-        PlayerControllerTest.teamDao = teamDao;
         team = new Team();
         team.setName("Orlando Magic");
         teamDao.save(team);
@@ -200,18 +197,16 @@ public class PlayerControllerTest {
     public void testShouldRetrievePlayerInfoAndPages() throws Exception {
         String body = """
                 {
+                "page": 1,
                 "size": 1
-                "page" : 1
                 }
                 """;
-        mvc.perform(post(Constants.Path.PLAYER_API + Constants.Path.LIST))
-                .andExpect(status().isOk());
 
-        MvcResult mvcResult = mvc.perform(post(Constants.Path.PLAYER_API)
+        MvcResult mvcResult = mvc.perform(post(Constants.Path.PLAYER_API + Constants.Path.LIST)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
                 )
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn();
         PlayerPageResponseDto playerPageResponseDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PlayerPageResponseDto.class);
         assertEquals(playerPageResponseDto.getTotalPages(), 1);
@@ -220,29 +215,9 @@ public class PlayerControllerTest {
     }
 
     @Test
-    public void testShouldUploadPlayersInfoFromFile() throws Exception {
+    public void testShouldUploadPlayersFromFile() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file1 = new File(classLoader.getResource("populatePlayers.json").getFile());
-        byte[] attachedfile = Files.readAllBytes(file1.toPath());
-        MockMultipartFile file  =  new MockMultipartFile(
-                "file",
-                "populatePlayers.json",
-                MediaType.APPLICATION_JSON.getType(),
-                attachedfile
-        );
-        MvcResult mvcResult = mvc.perform(multipart(Constants.Path.PLAYER_API+Constants.Path.UPLOAD).file(file))
-                .andExpect(status().isOk())
-                .andReturn();
-        UploadJsonResponseDto uploadJsonResponseDto = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),UploadJsonResponseDto.class);
-        assertEquals(2,uploadJsonResponseDto.getNumCreated());
-        assertEquals(1,uploadJsonResponseDto.getNumNotCreated());
-
-    }
-
-    @Test
-    public void testShouldGenerateReport() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file1 = new File(classLoader.getResource("populatePlayers.json").getFile());
+        File file1 = new File(classLoader.getResource("populatePlayersTest.json").getFile());
         byte[] attachedfile = Files.readAllBytes(file1.toPath());
         MockMultipartFile file  =  new MockMultipartFile(
                 "file",

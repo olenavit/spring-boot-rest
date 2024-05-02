@@ -60,28 +60,4 @@
             <column name="name">Chicago Bulls</column>
         </insert>
     </changeSet>
-
-    <changeSet id="insert-players" author="olenavit">
-        <insert tableName="player">
-           <column name="name">Jayson</column>
-            <column name="surname">Tatum</column>
-            <column name="year_of_birth">1998</column>
-            <column name="position">{point guard, shooter}</column>
-            <column name="team">1</column>
-        </insert>
-        <insert tableName="player">
-            <column name="name">Kristaps</column>
-            <column name="surname">Porzingis</column>
-            <column name="year_of_birth">1995</column>
-            <column name="position">{shooter, power forward}</column>
-            <column name="team">1</column>
-        </insert>
-        <insert tableName="player">
-            <column name="name">Josh</column>
-            <column name="surname">Hart</column>
-            <column name="year_of_birth">1995</column>
-            <column name="position">{small forward}</column>
-            <column name="team">2</column>
-        </insert>
-    </changeSet>
 </databaseChangeLog>

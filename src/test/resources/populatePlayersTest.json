@@ -3,21 +3,18 @@
     "name": "Jayson",
     "surname": "Tatum",
     "year_of_birth": 1998,
-    "position": "shooter, power forward",
-    "teamId": 1
+    "position": "shooter, power forward"
   },
   {
     "name": "Kristaps",
     "surname": "Porzingis",
-    "year_of_birth": 1995,
-    "position": "shooter, power forward",
-    "teamId": 1
+    "year_of_birth": 1600,
+    "position": "shooter, power forward"
   },
   {
     "name": "Josh",
     "surname": "Hart",
     "year_of_birth": 1995,
-    "position": "small forward",
-    "teamId": 2
+    "position": "small forward"
   }
 ]
