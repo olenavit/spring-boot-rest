@@ -1,0 +1,87 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-schema" author="olenavit">
+        <createTable tableName="team">
+            <column name="id" type="INTEGER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="team_name_unique"/>
+            </column>
+        </createTable>
+        <addAutoIncrement tableName="team" columnName="id" incrementBy="1"/>
+        <createIndex tableName="team" indexName="idx_team_name">
+            <column name="name"/>
+        </createIndex>
+        <createTable tableName="player">
+            <column name="id" type="INTEGER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="year_of_birth" type="INTEGER"/>
+            <column name="position" type="text[]"/>
+            <column name="team" type="INTEGER"/>
+        </createTable>
+        <addAutoIncrement tableName="player" columnName="id" incrementBy="1"/>
+        <addForeignKeyConstraint baseTableName="player" baseColumnNames="team" constraintName="FK_player_team"
+                                 referencedTableName="team"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+        <createIndex tableName="player" indexName="idx_name_surname">
+            <column name="name"/>
+            <column name="surname"/>
+        </createIndex>
+        <createIndex tableName="player" indexName="idx_name">
+            <column name="name"/>
+        </createIndex>
+        <createIndex tableName="player" indexName="idx_surname">
+            <column name="surname"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="insert" author="olenavit">
+        <insert tableName="team">
+            <column name="name">Boston Celtics</column>
+        </insert>
+        <insert tableName="team">
+            <column name="name">New York Knicks</column>
+        </insert>
+        <insert tableName="team">
+            <column name="name">Philadelphia 76ers</column>
+        </insert>
+        <insert tableName="team">
+            <column name="name">Chicago Bulls</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert-players" author="olenavit">
+        <insert tableName="player">
+           <column name="name">Jayson</column>
+            <column name="surname">Tatum</column>
+            <column name="year_of_birth">1998</column>
+            <column name="position">{point guard, shooter}</column>
+            <column name="team">1</column>
+        </insert>
+        <insert tableName="player">
+            <column name="name">Kristaps</column>
+            <column name="surname">Porzingis</column>
+            <column name="year_of_birth">1995</column>
+            <column name="position">{shooter, power forward}</column>
+            <column name="team">1</column>
+        </insert>
+        <insert tableName="player">
+            <column name="name">Josh</column>
+            <column name="surname">Hart</column>
+            <column name="year_of_birth">1995</column>
+            <column name="position">{small forward}</column>
+            <column name="team">2</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

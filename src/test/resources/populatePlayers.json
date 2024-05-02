@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Jayson",
+    "surname": "Tatum",
+    "yearOfBirth": 1998,
+    "position": "shooter,power forward",
+    "teamId": 1
+  },
+  {
+    "name": "Kristaps",
+    "surname": "Porzingis",
+    "yearOfBirth": 1995,
+    "position": "shooter,power forward",
+    "teamId": 1
+  },
+  {
+    "name": "Josh",
+    "surname": "Hart",
+    "yearOfBirth": 1995,
+    "position": "small forward",
+    "teamId": 2
+  }
+]

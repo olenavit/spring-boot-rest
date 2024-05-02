@@ -1,0 +1,336 @@
+openapi: "3.0.3"
+info:
+  title: "spring_boot_rest API"
+  description: "spring_boot_rest API"
+  version: "1.0.0"
+servers:
+  - url: "https://spring_boot_rest"
+paths:
+  /api/team/{id}:
+    put:
+      summary: "PUT api/team/{id}"
+      operationId: "updateTeam"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TeamDto"
+    delete:
+      summary: "DELETE api/team/{id}"
+      operationId: "deleteTeamById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+    get:
+      summary: "GET api/team/{id}"
+      operationId: "getTeamById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TeamDto"
+  /api/team:
+    post:
+      summary: "POST api/team"
+      operationId: "createTeam"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTeamDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/TeamDto"
+    get:
+      summary: "GET api/team"
+      operationId: "getTeams"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/TeamDto"
+  /api/player/{id}:
+    put:
+      summary: "PUT api/player/{id}"
+      operationId: "updatePlayer"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlayerDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlayerDetailsDto"
+    delete:
+      summary: "DELETE api/player/{id}"
+      operationId: "deleteTeamById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+    get:
+      summary: "GET api/player/{id}"
+      operationId: "getPlayerById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlayerDetailsDto"
+  /api/player:
+    post:
+      summary: "POST api/player"
+      operationId: "createPlayer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePlayerDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlayerDetailsDto"
+  /api/player/upload:
+    post:
+      summary: "POST api/player/upload"
+      operationId: "uploadFromFile"
+      parameters:
+        - name: "file"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+            format: "binary"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UploadJsonResponseDto"
+  /api/player/_list:
+    post:
+      summary: "POST api/player/_list"
+      operationId: "getPlayersByGivenFieldsAndPages"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlayerQueryDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PlayerPageResponseDto"
+  /api/player/report:
+    post:
+      summary: "POST api/player/report"
+      operationId: "getPlayersByGivenField"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlayerQueryDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+components:
+  schemas:
+    TeamDto:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+    CreateTeamDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+    UpdatePlayerDto:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        year_of_birth:
+          type: "integer"
+          format: "int32"
+        position:
+          type: "array"
+          items:
+            type: "string"
+        teamId:
+          type: "integer"
+          format: "int32"
+    Team:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+    PlayerDetailsDto:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        yearOfBirth:
+          type: "integer"
+          format: "int32"
+        position:
+          type: "array"
+          items:
+            type: "string"
+        team:
+          $ref: "#/components/schemas/Team"
+    CreatePlayerDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        yearOfBirth:
+          type: "integer"
+          format: "int32"
+        position:
+          type: "array"
+          items:
+            type: "string"
+        teamId:
+          type: "integer"
+          format: "int32"
+    UploadJsonResponseDto:
+      type: "object"
+      properties:
+        numCreated:
+          type: "integer"
+          format: "int32"
+        numNotCreated:
+          type: "integer"
+          format: "int32"
+    PlayerQueryDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        page:
+          type: "integer"
+          format: "int32"
+        size:
+          type: "integer"
+          format: "int32"
+    PlayerInfoDto:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        surname:
+          type: "string"
+    PlayerPageResponseDto:
+      type: "object"
+      properties:
+        list:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/PlayerInfoDto"
+        totalPages:
+          type: "integer"
+          format: "int32"

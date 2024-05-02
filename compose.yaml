@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - 5432:5432
+#
+#
+#services:
+#  postgres:
+#    image: 'postgres:13'
+#    container_name: 'java-postgres'
+#    ports:
+#      - 5432:5432
+#    environment:
+#      - 'POSTGRES_USER=sa'
+#      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+#      - 'POSTGRES_DB=java'
