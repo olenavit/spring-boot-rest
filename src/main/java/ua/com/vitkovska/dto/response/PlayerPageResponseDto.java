@@ -13,4 +13,5 @@ import java.util.List;
 public class PlayerPageResponseDto {
     private List<PlayerInfoDto> list;
     private Integer totalPages;
+    private Long totalElements;
 }

@@ -24,13 +24,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(TeamNotFoundException.class)
-    public final ResponseEntity<ErrorDetails> handleTeamNotFoundException(Exception ex, WebRequest request){
-        ErrorDetails errorDetails =
-                new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler(PlayerNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     public final ResponseEntity<ErrorDetails> handlePlayerNotFoundException(Exception ex, WebRequest request){
         ErrorDetails errorDetails =
                 new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));

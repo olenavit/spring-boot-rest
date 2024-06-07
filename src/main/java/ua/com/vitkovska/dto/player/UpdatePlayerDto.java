@@ -1,6 +1,5 @@
 package ua.com.vitkovska.dto.player;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -24,7 +23,6 @@ public class UpdatePlayerDto {
     private String surname;
     @Min(value = Constants.Player.MIN_YEAR_OF_BIRTH, message = Constants.Player.ValidationMessages.MIN_YEAR_OF_BIRTH_NOT_VALID)
     @Max(value = Constants.Player.MAX_YEAR_OF_BIRTH, message = Constants.Player.ValidationMessages.MAX_YEAR_OF_BIRTH_NOT_VALID)
-    @JsonProperty("year_of_birth")
     private Integer yearOfBirth;
     private List<String> position;
     private Integer teamId;

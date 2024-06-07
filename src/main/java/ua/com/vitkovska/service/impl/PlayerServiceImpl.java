@@ -8,6 +8,7 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ua.com.vitkovska.commons.Constants;
 import ua.com.vitkovska.dao.PlayerDao;
 import ua.com.vitkovska.dto.response.UploadJsonResponseDto;
 import ua.com.vitkovska.dto.player.CreatePlayerDto;
@@ -30,8 +32,7 @@ import ua.com.vitkovska.dto.player.PlayerInfoDto;
 import ua.com.vitkovska.dto.player.PlayerQueryDto;
 import ua.com.vitkovska.dto.player.UpdatePlayerDto;
 import ua.com.vitkovska.dto.team.TeamDto;
-import ua.com.vitkovska.exceptions.PlayerNotFoundException;
-import ua.com.vitkovska.exceptions.TeamNotFoundException;
+import ua.com.vitkovska.exceptions.EntityNotFoundException;
 import ua.com.vitkovska.mapper.PlayerMapper;
 import ua.com.vitkovska.mapper.TeamMapper;
 import ua.com.vitkovska.model.Player;
@@ -57,6 +58,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final Validator validator;
 
     @Override
+    @Transactional
     public PlayerDetailsDto create(CreatePlayerDto createPlayerDto) {
         Integer teamId = createPlayerDto.getTeamId();
         Team team;
@@ -77,10 +79,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @Transactional
     public PlayerDetailsDto update(UpdatePlayerDto updatePlayerDto) {
         Optional<Player> optionalPlayer = playerDao.findById(updatePlayerDto.getId());
         if (optionalPlayer.isEmpty()) {
-            throw new PlayerNotFoundException(updatePlayerDto.getId());
+            throw new EntityNotFoundException(updatePlayerDto.getId(), Constants.Player.ENTITY_NAME);
         }
         Player player = optionalPlayer.get();
         if (updatePlayerDto.getTeamId() != null) {
@@ -93,6 +96,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @Transactional
     public boolean deleteById(int id) {
         if (getById(id).isEmpty()) {
             return false;
@@ -103,19 +107,20 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Page<PlayerInfoDto> list(PlayerQueryDto entity) {
-        PageRequest pageRequest = PageRequest.of(entity.getPage() - 1, entity.getSize());
+        PageRequest pageRequest = PageRequest.of(entity.getPage(), entity.getSize());
         Specification<Player> playerSpecification = getPlayerSpecification(entity);
         Page<Player> players = playerDao.findAll(playerSpecification, pageRequest);
         return players.map(playerMapper::toPlayerInfoDto);
     }
 
-    public List<PlayerInfoDto> report(PlayerQueryDto entity) {
+    private List<PlayerInfoDto> report(PlayerQueryDto entity) {
         Specification<Player> playerSpecification = getPlayerSpecification(entity);
         List<Player> players = playerDao.findAll(playerSpecification);
         return players.stream().map(playerMapper::toPlayerInfoDto).toList();
     }
 
     @Override
+    @Transactional
     public void generateReport(HttpServletResponse response, PlayerQueryDto playerQueryDto) {
 
         response.setContentType("text/csv");
@@ -135,6 +140,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    @Transactional
     public UploadJsonResponseDto uploadFromFile(MultipartFile multipart) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -165,7 +171,7 @@ public class PlayerServiceImpl implements PlayerService {
     private Team getPlayerTeamById(int teamId) {
         Optional<TeamDto> teamDtoOptional = teamService.getById(teamId);
         if (teamDtoOptional.isEmpty()) {
-            throw new TeamNotFoundException(teamId);
+            throw new EntityNotFoundException(teamId,Constants.Team.ENTITY_NAME);
         }
         return teamMapper.fromTeamDto(teamDtoOptional.get());
     }
@@ -189,11 +195,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     private Specification<Player> getPlayerSpecification(PlayerQueryDto entity) {
         Specification<Player> specification = Specification.where(null);
-        if (entity.getName() != null) {
+        if (entity.getName() != null && !entity.getName().equals("")) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("name"), entity.getName()));
         }
-        if (entity.getSurname() != null) {
+        if (entity.getSurname() != null && !entity.getSurname().equals("")) {
             specification = specification.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("surname"), entity.getSurname()));
         }

@@ -26,8 +26,15 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(
@@ -52,7 +59,7 @@ public class PlayerControllerTest {
               {
                   "name":"%s",
                   "surname":"%s",
-                  "year_of_birth":%d,
+                  "yearOfBirth":%d,
                   "position":"%s",
                   "teamId":"%s"
               }
@@ -171,7 +178,7 @@ public class PlayerControllerTest {
     @Test
     public void testShouldNotUpdateTeamNotValidBody() throws Exception {
         String body = """
-                {"year_of_birth": 1600}"
+                {"yearOfBirth": 1600}"
                 """;
         mvc.perform(put(Constants.Path.PLAYER_API + Constants.Path.ID_PATH_VARIABLE, player.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -197,7 +204,7 @@ public class PlayerControllerTest {
     public void testShouldRetrievePlayerInfoAndPages() throws Exception {
         String body = """
                 {
-                "page": 1,
+                "page": 0,
                 "size": 1
                 }
                 """;
@@ -216,8 +223,7 @@ public class PlayerControllerTest {
 
     @Test
     public void testShouldUploadPlayersFromFile() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file1 = new File(classLoader.getResource("populatePlayersTest.json").getFile());
+        File file1 = new File("src/test/resources/populatePlayersTest.json");
         byte[] attachedfile = Files.readAllBytes(file1.toPath());
         MockMultipartFile file  =  new MockMultipartFile(
                 "file",

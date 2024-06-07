@@ -2,10 +2,12 @@ package ua.com.vitkovska.commons;
 
 
 public final class Constants {
-    private Constants(){
+    private Constants() {
 
     }
+
     public final static class Player {
+        public static final String ENTITY_NAME = "Player";
         public static final int MIN_YEAR_OF_BIRTH = 1901;
         public static final int MAX_YEAR_OF_BIRTH = 2010;
         public static final String NAME_PATTERN = "^[A-Z][a-zA-Z]*$";
@@ -24,6 +26,7 @@ public final class Constants {
 
 
     public static final class Team {
+        public static final String ENTITY_NAME = "Team";
         public static final class ValidationMessages {
             public static final String NAME_BLANK = "Name is required";
             public static final String NAME_NOT_UNIQUE = "Team is already exist";
@@ -44,8 +47,7 @@ public final class Constants {
     }
 
     public static final class Exceptions {
-        public static final String PLAYER_NOT_FOUND_MESSAGE = "PLAYER WITH ID = %s not found";
-        public static final String TEAM_NOT_FOUND_MESSAGE = "TEAM WITH ID = %s not found";
+        public static final String ENTITY_NOT_FOUND_MESSAGE = "%s with id = %s not found";
     }
 
 

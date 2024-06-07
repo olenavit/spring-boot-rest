@@ -12,7 +12,7 @@ import ua.com.vitkovska.commons.Constants;
 import ua.com.vitkovska.dto.team.CreateTeamDto;
 import ua.com.vitkovska.dto.team.TeamDto;
 import ua.com.vitkovska.dto.team.UpdateTeamDto;
-import ua.com.vitkovska.exceptions.TeamNotFoundException;
+import ua.com.vitkovska.exceptions.EntityNotFoundException;
 import ua.com.vitkovska.service.TeamService;
 
 import java.net.URI;
@@ -25,6 +25,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping(Constants.Path.TEAM_API)
 public class TeamController {
 
@@ -39,7 +40,7 @@ public class TeamController {
     public EntityModel<TeamDto> getTeamById(@PathVariable int id) {
         Optional<TeamDto> teamDtoOptional = teamService.getById(id);
         if (teamDtoOptional.isEmpty()) {
-            throw new TeamNotFoundException(id);
+            throw new EntityNotFoundException(id,Constants.Team.ENTITY_NAME);
         }
         EntityModel<TeamDto> teamDtoEntityModel = EntityModel.of(teamDtoOptional.get());
         WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).getTeams());

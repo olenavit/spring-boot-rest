@@ -41,7 +41,7 @@ public class CreatePlayerDto {
     @JsonCreator
     public CreatePlayerDto(@JsonProperty("name") String name,
                            @JsonProperty("surname") String surname,
-                           @JsonProperty("year_of_birth") Integer yearOfBirth,
+                           @JsonProperty("yearOfBirth") Integer yearOfBirth,
                            @JsonProperty("position") String position,
                            @JsonProperty("teamId") Integer teamId) {
         this.name = name;

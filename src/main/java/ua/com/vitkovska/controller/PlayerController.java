@@ -7,7 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ua.com.vitkovska.commons.Constants;
@@ -18,7 +27,7 @@ import ua.com.vitkovska.dto.player.PlayerQueryDto;
 import ua.com.vitkovska.dto.player.UpdatePlayerDto;
 import ua.com.vitkovska.dto.response.PlayerPageResponseDto;
 import ua.com.vitkovska.dto.response.UploadJsonResponseDto;
-import ua.com.vitkovska.exceptions.PlayerNotFoundException;
+import ua.com.vitkovska.exceptions.EntityNotFoundException;
 import ua.com.vitkovska.service.PlayerService;
 
 import java.io.IOException;
@@ -27,6 +36,7 @@ import java.util.Optional;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(Constants.Path.PLAYER_API)
 @RequiredArgsConstructor
 public class PlayerController {
@@ -35,7 +45,7 @@ public class PlayerController {
     public EntityModel<PlayerDetailsDto> getPlayerById(@PathVariable int id){
         Optional<PlayerDetailsDto> optionalPlayerDetailsDto = playerService.getById(id);
         if(optionalPlayerDetailsDto.isEmpty()){
-            throw new PlayerNotFoundException(id);
+            throw new EntityNotFoundException(id,Constants.Player.ENTITY_NAME);
         }
         return EntityModel.of(optionalPlayerDetailsDto.get());
     }
@@ -72,7 +82,7 @@ public class PlayerController {
     @PostMapping(Constants.Path.LIST)
     public EntityModel<PlayerPageResponseDto> getPlayersByGivenFieldsAndPages(@Valid @RequestBody PlayerQueryDto playerQueryDto){
         Page<PlayerInfoDto> playerInfoDtos = playerService.list(playerQueryDto);
-        PlayerPageResponseDto playerPageResponseDto = new PlayerPageResponseDto(playerInfoDtos.stream().toList(), playerInfoDtos.getTotalPages());
+        PlayerPageResponseDto playerPageResponseDto = new PlayerPageResponseDto(playerInfoDtos.stream().toList(), playerInfoDtos.getTotalPages(),playerInfoDtos.getTotalElements());
        return EntityModel.of(playerPageResponseDto);
     }
 
