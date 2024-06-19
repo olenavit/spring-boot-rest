@@ -1,6 +1,5 @@
 package ua.com.vitkovska.commons;
 
-
 public final class Constants {
     private Constants() {
 
@@ -27,6 +26,7 @@ public final class Constants {
 
     public static final class Team {
         public static final String ENTITY_NAME = "Team";
+
         public static final class ValidationMessages {
             public static final String NAME_BLANK = "Name is required";
             public static final String NAME_NOT_UNIQUE = "Team is already exist";
@@ -48,6 +48,15 @@ public final class Constants {
 
     public static final class Exceptions {
         public static final String ENTITY_NOT_FOUND_MESSAGE = "%s with id = %s not found";
+    }
+
+
+    public static final class Message {
+
+        public static final class Team {
+            public static final String TEAM_CREATED_CONTENT = "Team with name %s was created";
+            public static final String TEAM_CREATED_SUBJECT = "New team was recently created";
+        }
     }
 
 

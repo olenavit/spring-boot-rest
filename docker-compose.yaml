@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    hostname: db
+    environment:
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - "5432:5432"
+    networks:
+      - mail-massage-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  rest-api:
+    build: .
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    networks:
+      - mail-massage-network
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydatabase
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+volumes:
+  postgres_data:
+networks:
+  mail-massage-network:
+    external: true

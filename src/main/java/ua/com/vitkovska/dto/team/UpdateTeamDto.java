@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.com.vitkovska.commons.Constants;
-import ua.com.vitkovska.validation.UniqueTeam;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +16,5 @@ import ua.com.vitkovska.validation.UniqueTeam;
 public class UpdateTeamDto {
     int id;
     @NotBlank(message = Constants.Team.ValidationMessages.NAME_BLANK)
-    @UniqueTeam
     private String name;
 }

@@ -3,13 +3,16 @@ package ua.com.vitkovska.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import ua.com.vitkovska.commons.Constants;
 import ua.com.vitkovska.dao.TeamDao;
 import ua.com.vitkovska.dto.team.CreateTeamDto;
 import ua.com.vitkovska.dto.team.TeamDto;
 import ua.com.vitkovska.dto.team.UpdateTeamDto;
 import ua.com.vitkovska.exceptions.EntityNotFoundException;
+import ua.com.vitkovska.exceptions.EntityNotUniqueException;
 import ua.com.vitkovska.mapper.TeamMapper;
 import ua.com.vitkovska.model.Team;
 import ua.com.vitkovska.service.TeamService;
@@ -37,7 +40,11 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public TeamDto create(CreateTeamDto createTeamDto) {
+        if (existsByTeamName(createTeamDto.getName())) {
+            throw new EntityNotUniqueException(Constants.Team.ValidationMessages.NAME_NOT_UNIQUE);
+        }
         Team team = teamDao.save(teamMapper.fromCreateTeamDto(createTeamDto));
         return teamMapper.toTeamDto(team);
     }

@@ -25,11 +25,19 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public final ResponseEntity<ErrorDetails> handlePlayerNotFoundException(Exception ex, WebRequest request){
+    public final ResponseEntity<ErrorDetails> handleEntityNotFoundException(Exception ex, WebRequest request){
         ErrorDetails errorDetails =
                 new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(EntityNotUniqueException.class)
+    public final ResponseEntity<ErrorDetails> handleEntityNotUniqueException(Exception ex, WebRequest request){
+        ErrorDetails errorDetails =
+                new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), "Total Errors:" + ex.getErrorCount() + " First Error: " + ex.getFieldError().getDefaultMessage(), request.getDescription(false));
